@@ -1,4 +1,4 @@
-FROM python:3.8-slim
+FROM python:3.9-slim-buster
 
 ARG SERVICE_NAME=ud-producer
 
@@ -10,7 +10,7 @@ ENV NZBS_DIR=/nzbs
 WORKDIR /app
 
 # Copy only the files needed for pip install to maximize cache utilization
-COPY requirements.txt ./
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt

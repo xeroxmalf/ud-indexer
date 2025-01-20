@@ -1,0 +1,35 @@
+services:
+  blackhole:
+    build:
+      context: .
+      dockerfile: Dockerfile.blackhole
+    volumes:
+      - ./nzbs:/app/nzbs
+    environment:
+      - BLACKHOLE_BASE_WATCH_PATH=/app/nzbs
+      - BLACKHOLE_RADARR_PATH=
+      - BLACKHOLE_SONARR_PATH=
+      - BLACKHOLE_UD_MOUNT_PATH=/mnt/unionfs/Media/
+
+  producer:
+    build:
+      context: .
+      dockerfile: Dockerfile.producer
+    volumes:
+      - ./nzbs:/app/nzbs
+    environment:
+      - TMDB_KEY=your_tmdb_api_key 
+
+  indexer:  # Changed service name to 'indexer'
+    build:
+      context: .
+      dockerfile: Dockerfile.indexer  # Use Dockerfile.indexer
+    ports:
+      - "7990:7990"
+    volumes:
+      - ./nzbs:/app/nzbs
+    environment:
+      - INDEXER_BASE_URL=your_base_url
+      - NZBS_DIR=/app/nzbs
+    depends_on:
+      - producer
